@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rapport CP1 ISMAGI - Système Intelligent Automatisé</title>
+  <style>
+    :root {
+      --primary: #123c69;
+      --secondary: #1f6f8b;
+      --accent: #f4a261;
+      --light: #f7f9fb;
+      --dark: #1b1b1b;
+      --border: #d8e2ec;
+      --green: #2a9d8f;
+      --red: #d62828;
+      --blue: #457b9d;
+      --yellow: #e9c46a;
+      --muted: #5f6b76;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #eef3f8;
+      color: var(--dark);
+      line-height: 1.68;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 30px auto;
+      background: white;
+      padding: 50px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+      border-radius: 18px;
+    }
+
+    header {
+      text-align: center;
+      padding: 54px 30px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 36px;
+      margin: 0 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    header h2 {
+      font-size: 22px;
+      font-weight: normal;
+      margin: 0;
+      opacity: 0.96;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin: 25px 0 45px;
+    }
+
+    .meta div {
+      background: var(--light);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 14px;
+    }
+
+    .toc {
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      padding: 25px;
+      border-radius: 16px;
+      margin-bottom: 35px;
+    }
+
+    .toc a { color: var(--primary); text-decoration: none; }
+
+    h2.section-title {
+      color: var(--primary);
+      border-left: 7px solid var(--accent);
+      padding-left: 15px;
+      margin-top: 48px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: var(--secondary);
+      margin-top: 30px;
+      font-size: 22px;
+    }
+
+    h4 {
+      color: #333;
+      margin-top: 22px;
+      font-size: 18px;
+    }
+
+    p { margin: 12px 0; }
+    ul, ol { padding-left: 24px; }
+
+    .box {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 22px;
+      margin: 20px 0;
+    }
+
+    .important { background: #fff7e6; border-left: 6px solid var(--accent); }
+    .warning { background: #fff1f1; border-left: 6px solid var(--red); }
+    .success { background: #edfdf8; border-left: 6px solid var(--green); }
+
+    .choice-note {
+      position: relative;
+      background: linear-gradient(135deg, #eef8ff, #ffffff);
+      border: 1px solid #b7d7ea;
+      border-left: 7px solid var(--blue);
+      border-radius: 16px;
+      padding: 20px 22px 18px;
+      margin: 18px 0 26px;
+      box-shadow: 0 6px 18px rgba(69, 123, 157, 0.08);
+    }
+
+    .choice-note::before {
+      content: "CHOIX DE CONCEPTION";
+      display: inline-block;
+      background: var(--blue);
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .science-note {
+      background: linear-gradient(135deg, #fff8e9, #ffffff);
+      border-color: #f2d39b;
+      border-left-color: var(--accent);
+    }
+
+    .science-note::before {
+      content: "EXPLICATION SCIENTIFIQUE";
+      background: var(--accent);
+    }
+
+    .risk-note {
+      background: linear-gradient(135deg, #fff1f1, #ffffff);
+      border-color: #efb3b3;
+      border-left-color: var(--red);
+    }
+
+    .risk-note::before {
+      content: "LIMITE ET RISQUE À ÉVITER";
+      background: var(--red);
+    }
+
+    .formula {
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      padding: 22px;
+      border-radius: 14px;
+      font-size: 25px;
+      font-family: Georgia, 'Times New Roman', serif;
+      margin: 18px 0;
+      letter-spacing: 0.4px;
+    }
+
+    .formula small {
+      display: block;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      margin-top: 8px;
+      opacity: 0.85;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 22px 0;
+      font-size: 14px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    td {
+      border: 1px solid var(--border);
+      padding: 11px;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: #f8fbfd; }
+
+    .diagram {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 22px;
+      border-radius: 15px;
+      overflow-x: auto;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+      line-height: 1.45;
+      margin: 20px 0;
+      white-space: pre;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.04);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #e8f3f8;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: bold;
+      margin: 3px;
+    }
+
+    .illustration-panel {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      background: #fbfdff;
+      margin: 25px 0;
+    }
+
+    .schematic {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 18px;
+      align-items: center;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .module-box {
+      border: 2px solid var(--primary);
+      border-radius: 14px;
+      padding: 14px;
+      background: white;
+      text-align: center;
+      min-width: 140px;
+      box-shadow: 0 6px 16px rgba(18,60,105,0.08);
+    }
+
+    .module-box.sensor { border-color: var(--green); background: #effaf7; }
+    .module-box.actuator { border-color: var(--accent); background: #fff8ed; }
+    .module-box.power { border-color: var(--red); background: #fff2f2; }
+
+    .module-title { font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+    .pin-list { font-size: 12px; text-align: left; margin-top: 8px; line-height: 1.45; }
+
+    .wire-line {
+      position: relative;
+      height: 4px;
+      min-width: 80px;
+      background: var(--blue);
+      border-radius: 10px;
+    }
+
+    .wire-line.red { background: #d62828; }
+    .wire-line.black { background: #111827; }
+    .wire-line.green { background: #2a9d8f; }
+    .wire-line.yellow { background: #e9c46a; }
+    .wire-line.blue { background: #457b9d; }
+
+    .connection-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .connection-card {
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 16px;
+      background: white;
+    }
+
+    .mini-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 10px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      background: #e8f3f8;
+    }
+
+    .arduino-board {
+      background: #0b4f8a;
+      color: white;
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      min-height: 260px;
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.12);
+    }
+
+    .pin-row { display: flex; justify-content: center; gap: 6px; margin: 12px 0; flex-wrap: wrap; }
+    .pin { background: #111827; color: white; border-radius: 6px; padding: 5px 7px; font-size: 11px; min-width: 34px; text-align: center; }
+
+    .wiring-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 18px;
+      align-items: center;
+      margin: 25px 0;
+    }
+
+    .vertical-stack { display: grid; gap: 12px; }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; background: white; border: 1px solid var(--border); border-radius: 20px; padding: 6px 10px; }
+    .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+    .dot.red { background: #d62828; } .dot.black { background: #111827; } .dot.green { background: #2a9d8f; } .dot.blue { background: #457b9d; } .dot.yellow { background: #e9c46a; }
+
+    .prototype-zone { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 20px 0; }
+    .prototype-box { min-height: 220px; border: 2px dashed var(--border); border-radius: 18px; background: linear-gradient(180deg, #ffffff, #f6f9fc); padding: 18px; position: relative; }
+    .prototype-label { position: absolute; background: var(--primary); color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .label-top-left { top: 12px; left: 12px; } .label-top-right { top: 12px; right: 12px; } .label-bottom-left { bottom: 12px; left: 12px; } .label-bottom-right { bottom: 12px; right: 12px; }
+
+    .print-note { text-align: center; color: #666; font-size: 13px; margin-top: 35px; }
+
+    @media (max-width: 850px) {
+      .wiring-layout, .prototype-zone, .schematic { grid-template-columns: 1fr; }
+      .wire-line { height: 40px; width: 4px; margin: auto; }
+    }
+
+    @media print {
+      body { background: white; }
+      .page { margin: 0; max-width: none; box-shadow: none; border-radius: 0; }
+      h2.section-title { page-break-before: auto; }
+      table, .box, .diagram, .card, .choice-note, .illustration-panel { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>Rapport CP1 ISMAGI</h1>
+      <h2>Système intelligent automatisé : parking, irrigation, éclairage et supervision environnementale</h2>
+    </header>
+
+    <section class="meta">
+      <div><strong>Établissement :</strong><br>ISMAGI</div>
+      <div><strong>Module :</strong><br>Projet CP1</div>
+      <div><strong>Type de projet :</strong><br>Système embarqué Arduino</div>
+      <div><strong>Domaine :</strong><br>Smart City, automatisation, IoT</div>
+    </section>
+
+    <nav class="toc">
+      <h2>Sommaire</h2>
+      <ol>
+        <li><a href="#intro">Introduction générale</a></li>
+        <li><a href="#objectifs">Objectifs du projet</a></li>
+        <li><a href="#architecture">Architecture générale</a></li>
+        <li><a href="#composants">Composants utilisés</a></li>
+        <li><a href="#fonctionnement">Fonctionnement technique</a></li>
+        <li><a href="#scientifique">Concepts scientifiques, électriques et techniques</a></li>
+        <li><a href="#schemas">Schémas, diagrammes et tableaux</a></li>
+        <li><a href="#donnees">Types de données utilisées</a></li>
+        <li><a href="#dimensionnement">Dimensionnement et protections</a></li>
+        <li><a href="#vulgarise">Version vulgarisée</a></li>
+        <li><a href="#ameliorations">Limites et améliorations futures</a></li>
+        <li><a href="#conclusion">Conclusion générale</a></li>
+      </ol>
+    </nav>
+
+    <section id="intro">
+      <h2 class="section-title">1. Introduction générale</h2>
+      <p>
+        Ce projet CP1 consiste à concevoir un système intelligent automatisé basé sur une carte Arduino Uno capable de gérer plusieurs fonctions en temps réel : une barrière de parking automatique, un système d’irrigation intelligent, un éclairage adaptatif et une interface de supervision environnementale.
+      </p>
+      <p>
+        Le système repose sur l’acquisition de données physiques grâce à plusieurs capteurs. Ces données sont ensuite analysées par le microcontrôleur afin de déclencher des actions automatiques selon des conditions programmées. L’objectif n’est donc pas uniquement de brancher des composants, mais de construire une logique complète de décision, de contrôle et de protection.
+      </p>
+      <div class="box important">
+        <strong>Idée principale :</strong> transformer des phénomènes physiques réels, comme la distance, l’humidité, la lumière, la pluie ou le mouvement, en décisions automatiques exécutées par des actionneurs.
+      </div>
+      <p>
+        Le projet illustre plusieurs domaines complémentaires : systèmes embarqués, électronique, automatisme, acquisition de données, logique de seuils, gestion énergétique, supervision et sécurité électrique. Cette approche donne au système une dimension proche d’un prototype de Smart City à petite échelle.
+      </p>
+    </section>
+
+    <section id="objectifs">
+      <h2 class="section-title">2. Objectifs du projet</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Objectifs techniques</h3>
+          <ul>
+            <li>Automatiser l’ouverture et la fermeture d’une barrière de parking.</li>
+            <li>Contrôler une pompe d’irrigation selon l’état réel du sol.</li>
+            <li>Allumer l’éclairage uniquement lorsque la situation le justifie.</li>
+            <li>Afficher les informations essentielles sur un écran LCD I2C.</li>
+            <li>Utiliser une horloge temps réel pour intégrer une logique horaire.</li>
+            <li>Réduire les erreurs de décision grâce à la combinaison de plusieurs capteurs.</li>
+            <li>Protéger les composants électroniques contre les surintensités et surtensions.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Objectifs pédagogiques</h3>
+          <ul>
+            <li>Comprendre le rôle d’un microcontrôleur dans un système automatisé.</li>
+            <li>Lire et interpréter des capteurs analogiques et numériques.</li>
+            <li>Commander des actionneurs à partir d’une logique programmée.</li>
+            <li>Appliquer des notions d’électricité, d’automatisme et de physique.</li>
+            <li>Structurer un projet électronique complet et défendable en soutenance.</li>
+            <li>Identifier les limites d’un capteur et proposer des solutions de robustesse.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="choice-note">
+        <strong>Orientation académique du projet</strong><br>
+        Le projet dépasse le niveau d’un montage isolé. Il présente une architecture complète : capteurs, acquisition, filtrage, décision, actionneurs, affichage et protections. Cette structure est importante pour montrer une compréhension globale des systèmes embarqués.
+      </div>
+    </section>
+
+    <section id="architecture">
+      <h2 class="section-title">3. Architecture générale du système</h2>
+      <div class="diagram">ENVIRONNEMENT RÉEL
+   │
+   ▼
+CAPTEURS : distance, humidité du sol, pluie, luminosité, mouvement, température, niveau d’eau
+   │
+   ▼
+ARDUINO UNO : acquisition, filtrage, comparaison, seuils, logique de décision
+   │
+   ▼
+ACTIONNEURS : servo moteur, relais, pompe, LED, écran LCD
+   │
+   ▼
+ACTION PHYSIQUE : ouverture, arrosage, éclairage, affichage, alerte ou arrêt de sécurité</div>
+      <p>
+        L’Arduino représente le centre de décision. Il reçoit les signaux des capteurs, les convertit en données exploitables, les compare à des seuils, puis active les actionneurs correspondants. Chaque action n’est déclenchée que si plusieurs conditions cohérentes sont réunies.
+      </p>
+      <div class="grid-3">
+        <div class="card"><span class="tag">Entrées</span><p>Capteurs analogiques, numériques et temporels.</p></div>
+        <div class="card"><span class="tag">Traitement</span><p>Lecture, filtrage, comparaison, conditions logiques.</p></div>
+        <div class="card"><span class="tag">Sorties</span><p>Servo, pompe, relais, LED et affichage LCD.</p></div>
+      </div>
+      <div class="choice-note">
+        <strong>Pourquoi utiliser une architecture modulaire</strong><br>
+        Chaque fonction du système peut être testée séparément : parking, irrigation, éclairage et supervision. Cette modularité facilite le diagnostic, la maintenance, l’évolution du prototype et l’explication du projet en soutenance.
+      </div>
+    </section>
+
+    <section id="composants">
+      <h2 class="section-title">4. Composants utilisés</h2>
+      <table>
+        <thead>
+          <tr><th>Composant</th><th>Rôle</th><th>Type de signal</th><th>Utilisation dans le projet</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Arduino Uno</td><td>Microcontrôleur central</td><td>Numérique / analogique</td><td>Traitement, décision et commande</td></tr>
+          <tr><td>HC-SR04</td><td>Capteur ultrason</td><td>Temps numérique</td><td>Détection véhicule ou niveau</td></tr>
+          <tr><td>DHT11 / DHT22</td><td>Température et humidité de l’air</td><td>Numérique</td><td>Monitoring environnemental</td></tr>
+          <tr><td>LDR</td><td>Capteur de luminosité</td><td>Analogique</td><td>Détection obscurité / luminosité</td></tr>
+          <tr><td>PIR HC-SR501</td><td>Détecteur de mouvement</td><td>Numérique</td><td>Activation intelligente de l’éclairage</td></tr>
+          <tr><td>Capteur d’humidité du sol</td><td>Mesure de l’eau disponible dans la terre</td><td>Analogique</td><td>Commande de l’irrigation</td></tr>
+          <tr><td>Capteur pluie</td><td>Détection de pluie ou d’eau de surface</td><td>Analogique ou numérique</td><td>Sécurité et économie d’eau</td></tr>
+          <tr><td>Capteur niveau d’eau</td><td>Détection du réservoir vide ou plein</td><td>Analogique ou numérique</td><td>Protection de la pompe</td></tr>
+          <tr><td>RTC DS1302 / DS3231</td><td>Horloge temps réel</td><td>Série / I2C</td><td>Heure, date et logique temporelle</td></tr>
+          <tr><td>LCD I2C</td><td>Afficheur</td><td>I2C</td><td>Supervision utilisateur</td></tr>
+          <tr><td>Relais</td><td>Interrupteur commandé</td><td>Numérique</td><td>Commande de la pompe</td></tr>
+          <tr><td>Pompe DC</td><td>Actionneur hydraulique</td><td>Puissance DC</td><td>Irrigation automatique</td></tr>
+          <tr><td>Servo moteur</td><td>Actionneur angulaire</td><td>PWM</td><td>Ouverture et fermeture de la barrière</td></tr>
+          <tr><td>LED / lampe</td><td>Actionneur lumineux</td><td>Numérique / puissance</td><td>Éclairage intelligent</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="fonctionnement">
+      <h2 class="section-title">5. Fonctionnement technique</h2>
+
+      <h3>5.1 Barrière automatique</h3>
+      <p>
+        Le capteur ultrason HC-SR04 mesure la distance entre la barrière et le véhicule. Si la distance devient inférieure au seuil programmé, l’Arduino ne déclenche pas immédiatement le servo. Il confirme d’abord plusieurs mesures successives afin d’éviter une ouverture due à une mesure accidentelle.
+      </p>
+      <div class="diagram">Mesure distance → comparaison au seuil → confirmation de plusieurs lectures → ouverture servo → temporisation → fermeture servo</div>
+      <div class="formula">d = (v × t) / 2<small>d : distance ; v : vitesse du son ; t : temps aller-retour de l’onde ultrasonore</small></div>
+      <div class="science-note choice-note">
+        <strong>Principe de la mesure par ultrasons</strong><br>
+        Le capteur émet une onde ultrasonore, attend son retour après réflexion sur un obstacle, puis l’Arduino calcule la distance à partir du temps mesuré. La division par deux est nécessaire, car le temps mesuré correspond à un aller-retour.
+      </div>
+      <div class="choice-note">
+        <strong>Pourquoi utiliser un capteur ultrason pour la barrière</strong><br>
+        Le HC-SR04 permet une détection sans contact physique. Il est économique, simple à intégrer et suffisamment précis pour détecter un véhicule à courte distance dans un prototype de parking automatique.
+      </div>
+      <div class="choice-note risk-note">
+        <strong>Limites possibles du capteur ultrason</strong><br>
+        Certaines surfaces inclinées, absorbantes ou irrégulières peuvent réfléchir l’onde dans une mauvaise direction. Pour limiter les faux positifs, le système valide plusieurs mesures avant d’autoriser l’ouverture.
+      </div>
+
+      <h3>5.2 Irrigation automatique</h3>
+      <p>
+        Le système d’irrigation mesure l’humidité réelle du sol afin de déterminer si la plante a besoin d’eau. La pompe ne s’active que si le sol est sec, qu’aucune pluie n’est détectée et que le réservoir contient suffisamment d’eau.
+      </p>
+      <div class="formula">Pompe ON = Sol sec ET Pas de pluie ET Réservoir non vide</div>
+      <div class="choice-note science-note">
+        <strong>Pourquoi mesurer l’humidité du sol plutôt que seulement l’humidité de l’air</strong><br>
+        Le DHT11 mesure l’humidité relative de l’air, c’est-à-dire la quantité de vapeur d’eau présente dans l’atmosphère. Or, une plante absorbe principalement l’eau disponible dans le sol par ses racines. L’air peut être humide après une nuit fraîche alors que le sol reste sec en profondeur. Inversement, l’air peut être sec alors que la terre contient encore assez d’eau. Pour décider l’arrosage, le capteur d’humidité du sol donne donc une information plus pertinente.
+      </div>
+      <div class="choice-note science-note">
+        <strong>Évaporation, température et point de rosée</strong><br>
+        L’évaporation augmente lorsque la température est élevée, lorsque l’air est sec, lorsque le vent est présent et lorsque le sol est exposé au soleil. Le point de rosée correspond à la température à laquelle l’air devient saturé en vapeur d’eau et commence à condenser. Cette condensation peut humidifier légèrement la surface, mais elle ne garantit pas que les racines disposent d’une quantité d’eau suffisante.
+      </div>
+      <div class="choice-note">
+        <strong>Pourquoi combiner plusieurs conditions avant d’arroser</strong><br>
+        Une décision basée sur un seul capteur peut être fragile. En combinant l’humidité du sol, la pluie et le niveau du réservoir, le système évite d’arroser inutilement, protège la pompe et améliore la cohérence de l’irrigation.
+      </div>
+      <div class="choice-note risk-note">
+        <strong>Risque de fonctionnement à sec de la pompe</strong><br>
+        Une pompe DC peut chauffer ou s’endommager si elle fonctionne sans eau. Le contrôle du niveau du réservoir permet d’empêcher son activation lorsque l’eau est insuffisante.
+      </div>
+
+      <h3>5.3 Éclairage intelligent</h3>
+      <p>
+        Le système allume l’éclairage uniquement lorsque la luminosité est faible, que la période correspond réellement à la nuit et qu’un mouvement est détecté. Cette logique évite de laisser une lampe allumée inutilement.
+      </p>
+      <div class="formula">Lumière ON = Nuit ET Obscurité ET Mouvement détecté</div>
+      <div class="choice-note science-note">
+        <strong>Principe de la photorésistance LDR</strong><br>
+        La LDR change de résistance selon l’intensité lumineuse reçue. En forte lumière, sa résistance diminue. Dans l’obscurité, sa résistance augmente. L’Arduino lit cette variation sous forme de valeur analogique.
+      </div>
+      <div class="choice-note">
+        <strong>Pourquoi ajouter l’horloge RTC et les éphémérides</strong><br>
+        Le capteur LDR donne une information locale. Cette information peut être faussée par la poussière, une obstruction, une ombre ou une lumière artificielle. L’horloge RTC et les éphémérides ajoutent une référence temporelle : le système sait si la période correspond normalement au jour ou à la nuit.
+      </div>
+      <div class="choice-note risk-note">
+        <strong>Limites du capteur LDR</strong><br>
+        Une LDR seule peut confondre une vraie nuit avec un capteur couvert, une ombre intense ou un mauvais positionnement. La combinaison LDR + RTC + éphémérides réduit ce risque et rend la décision d’éclairage plus robuste.
+      </div>
+      <div class="choice-note risk-note">
+        <strong>Placement du capteur PIR</strong><br>
+        Le PIR détecte mieux les mouvements latéraux que les mouvements qui se dirigent directement vers lui. Il est donc préférable de l’orienter de manière à capter une trajectoire horizontale ou transversale dans la zone surveillée. Un placement vertical ou mal orienté peut réduire la sensibilité et provoquer des détections irrégulières.
+      </div>
+
+      <h3>5.4 Affichage LCD et supervision</h3>
+      <p>
+        L’écran LCD I2C affiche les données essentielles : heure, date, température, humidité, état de la pompe, état de la barrière, luminosité, mouvement et niveau d’eau. Il joue le rôle d’interface utilisateur locale.
+      </p>
+      <div class="choice-note">
+        <strong>Pourquoi utiliser un écran LCD I2C</strong><br>
+        Le protocole I2C réduit le nombre de fils nécessaires à l’affichage. Au lieu d’utiliser plusieurs broches numériques, le LCD I2C utilise principalement SDA et SCL, ce qui libère des broches pour les capteurs et actionneurs.
+      </div>
+    </section>
+
+    <section id="scientifique">
+      <h2 class="section-title">6. Concepts scientifiques, électriques et techniques</h2>
+
+      <h3>6.1 Ultrasons et propagation du son</h3>
+      <p>
+        Le HC-SR04 repose sur la propagation d’une onde mécanique dans l’air. Le temps mesuré dépend de la distance, mais aussi légèrement de la température, car la vitesse du son varie avec les conditions atmosphériques.
+      </p>
+      <div class="formula">d = (v × t) / 2<small>La mesure est divisée par deux car l’onde effectue un aller-retour.</small></div>
+      <div class="choice-note science-note">
+        <strong>Influence de l’environnement</strong><br>
+        La vitesse du son dans l’air est généralement proche de 343 m/s à température ambiante. Une variation de température peut légèrement modifier cette vitesse. Pour un prototype CP1, l’erreur reste acceptable, mais le principe doit être compris.
+      </div>
+
+      <h3>6.2 Hydrostatique de l’irrigation</h3>
+      <p>
+        Le système d’irrigation dépend de la pression de l’eau, de la hauteur à franchir, du diamètre des tuyaux, de la puissance de la pompe et des pertes de charge. Plus la hauteur de refoulement est importante, plus la pompe doit fournir d’effort.
+      </p>
+      <div class="formula">P = ρ × g × h<small>P : pression ; ρ : masse volumique de l’eau ; g : gravité ; h : hauteur de la colonne d’eau</small></div>
+      <div class="choice-note science-note">
+        <strong>Relation entre hauteur et pression</strong><br>
+        La pression hydrostatique augmente avec la hauteur de la colonne d’eau. Dans un petit prototype, cette notion explique pourquoi l’emplacement du réservoir et de la pompe influence directement le débit disponible.
+      </div>
+      <div class="choice-note">
+        <strong>Position optimale de la pompe</strong><br>
+        La pompe doit être placée le plus près possible du réservoir, de préférence en position basse. Une petite pompe pousse généralement mieux l’eau qu’elle ne l’aspire. Cette position réduit l’effort d’aspiration et améliore le débit.
+      </div>
+      <div class="choice-note risk-note">
+        <strong>Cavitation et pertes de charge</strong><br>
+        Si l’aspiration est trop difficile, des bulles peuvent apparaître dans le circuit : c’est la cavitation. Elle réduit le rendement, provoque du bruit et peut abîmer la pompe. Les tuyaux trop longs, trop étroits ou trop élevés augmentent aussi les pertes de charge.
+      </div>
+
+      <h3>6.3 Humidité relative, évaporation et point de rosée</h3>
+      <p>
+        L’humidité relative indique le pourcentage de vapeur d’eau présent dans l’air par rapport à la quantité maximale que cet air peut contenir à une température donnée. Plus l’air est chaud, plus il peut contenir de vapeur d’eau avant saturation.
+      </p>
+      <div class="formula">Évaporation ↑ si Température ↑ et Humidité relative ↓</div>
+      <p>
+        Le point de rosée correspond à la température à laquelle l’air devient saturé et où la vapeur d’eau commence à se condenser. Ce phénomène explique l’apparition de gouttelettes sur les surfaces froides. Cependant, une condensation superficielle ne signifie pas que le sol est suffisamment hydraté au niveau des racines.
+      </p>
+      <div class="choice-note science-note">
+        <strong>Pourquoi le DHT11 reste utile malgré ses limites</strong><br>
+        Le DHT11 ne suffit pas pour décider l’irrigation, mais il donne une information climatique utile. En complément du capteur de sol, il permet de mieux comprendre le contexte environnemental : chaleur, humidité de l’air et risque d’évaporation rapide.
+      </div>
+
+      <h3>6.4 Éphémérides et gestion solaire</h3>
+      <p>
+        Les éphémérides permettent d’estimer les heures de lever et de coucher du soleil selon la date et la position géographique. Dans ce prototype, elles servent de référence temporelle pour renforcer la décision d’éclairage.
+      </p>
+      <table>
+        <thead><tr><th>Ville</th><th>Heure simplifiée de coucher du soleil</th><th>Utilisation</th></tr></thead>
+        <tbody>
+          <tr><td>Rabat</td><td>18:30</td><td>Déclenchement éclairage nocturne</td></tr>
+          <tr><td>Tanger</td><td>18:25</td><td>Adaptation géographique</td></tr>
+          <tr><td>Fès</td><td>18:20</td><td>Variation locale</td></tr>
+          <tr><td>Laâyoune</td><td>19:00</td><td>Région sud</td></tr>
+          <tr><td>Oujda</td><td>18:15</td><td>Région orientale</td></tr>
+        </tbody>
+      </table>
+      <div class="choice-note">
+        <strong>Pourquoi les éphémérides renforcent la fiabilité</strong><br>
+        Contrairement à la LDR, l’éphéméride ne dépend pas de la poussière, d’un obstacle, d’une ombre ou d’une lumière artificielle. Elle offre une référence théorique qui permet de comparer la mesure locale avec le moment réel de la journée.
+      </div>
+
+      <h3>6.5 Détection infrarouge PIR</h3>
+      <p>
+        Le capteur PIR détecte les variations de rayonnement infrarouge émises par un corps chaud en mouvement. Il ne mesure pas directement une distance ; il détecte plutôt un changement thermique dans son champ de vision.
+      </p>
+      <div class="choice-note science-note">
+        <strong>Principe physique du PIR</strong><br>
+        Le corps humain émet un rayonnement infrarouge lié à sa température. Lorsque ce rayonnement se déplace devant les zones sensibles du capteur, le PIR produit un signal numérique indiquant un mouvement.
+      </div>
+      <div class="choice-note risk-note">
+        <strong>Sources de détection incorrecte</strong><br>
+        Le soleil direct, une source chaude, un courant d’air chaud, un animal ou un mauvais angle de placement peuvent provoquer des détections non souhaitées. Le réglage de la sensibilité et de la temporisation est donc important.
+      </div>
+
+      <h3>6.6 Génie électrique et protections</h3>
+      <p>
+        Le projet utilise des composants logiques de faible puissance, mais aussi des actionneurs plus consommateurs comme la pompe et le servo moteur. Il faut donc séparer la partie commande de la partie puissance.
+      </p>
+      <div class="choice-note science-note">
+        <strong>Rôle de la diode roue libre</strong><br>
+        Lorsqu’un moteur ou une bobine de relais s’arrête brutalement, une surtension peut apparaître. La diode roue libre offre un chemin de circulation au courant résiduel et protège l’Arduino contre les pics de tension.
+      </div>
+      <div class="choice-note risk-note">
+        <strong>Risque d’alimenter une pompe directement par Arduino</strong><br>
+        Une broche Arduino ne peut fournir qu’un courant très limité. Une pompe consomme beaucoup plus, surtout au démarrage. L’alimentation directe depuis une broche peut endommager le microcontrôleur. Il faut utiliser une alimentation externe et un relais ou transistor de commande.
+      </div>
+
+      <h3>6.7 Boucle de contrôle automatique</h3>
+      <p>
+        Le projet suit une boucle de contrôle classique : capter, analyser, décider, agir et afficher. Cette structure est présente dans de nombreux systèmes automatisés industriels ou domotiques.
+      </p>
+      <div class="diagram">Grandeur physique → Capteur → Signal → Arduino → Algorithme → Actionneur → Effet physique → Affichage</div>
+    </section>
+
+    <section id="schemas">
+      <h2 class="section-title">7. Schémas, diagrammes et tableaux</h2>
+
+      <div class="illustration-panel">
+        <h3>7.1 Illustration globale du prototype</h3>
+        <p>
+          Le prototype est organisé autour d’une carte Arduino Uno qui reçoit les informations des capteurs, puis commande les actionneurs selon une logique programmée.
+        </p>
+        <div class="wiring-layout">
+          <div class="vertical-stack">
+            <div class="module-box sensor"><div class="mini-icon">📏</div><div class="module-title">HC-SR04</div><small>Distance / niveau</small></div>
+            <div class="module-box sensor"><div class="mini-icon">🌡️</div><div class="module-title">DHT11 / DHT22</div><small>Température / humidité</small></div>
+            <div class="module-box sensor"><div class="mini-icon">💡</div><div class="module-title">LDR</div><small>Luminosité</small></div>
+            <div class="module-box sensor"><div class="mini-icon">🚶</div><div class="module-title">PIR</div><small>Mouvement</small></div>
+            <div class="module-box sensor"><div class="mini-icon">🌱</div><div class="module-title">Capteur sol</div><small>Humidité terre</small></div>
+          </div>
+          <div class="arduino-board">
+            <h3 style="color:white;margin-top:0;">ARDUINO UNO</h3>
+            <p>Unité centrale de traitement</p>
+            <div class="pin-row"><span class="pin">D2</span><span class="pin">D3</span><span class="pin">D4</span><span class="pin">D5</span><span class="pin">D6</span><span class="pin">D7</span></div>
+            <div class="pin-row"><span class="pin">D9</span><span class="pin">D10</span><span class="pin">A0</span><span class="pin">A1</span><span class="pin">A4 SDA</span><span class="pin">A5 SCL</span></div>
+            <div class="pin-row"><span class="pin">5V</span><span class="pin">GND</span><span class="pin">VIN</span><span class="pin">PWM</span></div>
+            <p><small>Lecture capteurs → traitement → décision → commande</small></p>
+          </div>
+          <div class="vertical-stack">
+            <div class="module-box actuator"><div class="mini-icon">🚧</div><div class="module-title">Servo moteur</div><small>Barrière</small></div>
+            <div class="module-box actuator"><div class="mini-icon">💧</div><div class="module-title">Pompe DC</div><small>Irrigation</small></div>
+            <div class="module-box actuator"><div class="mini-icon">🔌</div><div class="module-title">Relais</div><small>Commande puissance</small></div>
+            <div class="module-box actuator"><div class="mini-icon">🖥️</div><div class="module-title">LCD I2C</div><small>Affichage</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="illustration-panel">
+        <h3>7.2 Légende des couleurs de connexion</h3>
+        <div class="legend">
+          <span><i class="dot red"></i> Rouge : +5V ou +12V</span>
+          <span><i class="dot black"></i> Noir : GND / masse</span>
+          <span><i class="dot green"></i> Vert : signal numérique</span>
+          <span><i class="dot blue"></i> Bleu : signal analogique</span>
+          <span><i class="dot yellow"></i> Jaune : communication I2C / RTC</span>
+        </div>
+      </div>
+
+      <div class="illustration-panel">
+        <h3>7.3 Schéma de connexion des capteurs vers Arduino</h3>
+        <div class="connection-grid">
+          <div class="connection-card"><div class="mini-icon">📏</div><h4>HC-SR04</h4><div class="pin-list">VCC → 5V Arduino<br>GND → GND Arduino<br>TRIG → D9<br>ECHO → D10</div></div>
+          <div class="connection-card"><div class="mini-icon">🌡️</div><h4>DHT11 / DHT22</h4><div class="pin-list">VCC → 5V<br>GND → GND<br>DATA → D2<br>Résistance pull-up possible entre VCC et DATA</div></div>
+          <div class="connection-card"><div class="mini-icon">💡</div><h4>LDR</h4><div class="pin-list">Une borne → 5V<br>Autre borne → A0<br>Résistance vers GND pour former un pont diviseur</div></div>
+          <div class="connection-card"><div class="mini-icon">🚶</div><h4>PIR HC-SR501</h4><div class="pin-list">VCC → 5V<br>GND → GND<br>OUT → D3<br>Signal HIGH si mouvement détecté</div></div>
+          <div class="connection-card"><div class="mini-icon">🌧️</div><h4>Capteur pluie</h4><div class="pin-list">VCC → 5V<br>GND → GND<br>AO → entrée analogique<br>DO → entrée numérique optionnelle</div></div>
+          <div class="connection-card"><div class="mini-icon">🌱</div><h4>Humidité du sol</h4><div class="pin-list">VCC → 5V<br>GND → GND<br>AO → A1<br>Valeur haute ou basse selon module utilisé</div></div>
+        </div>
+      </div>
+
+      <div class="illustration-panel">
+        <h3>7.4 Connexion LCD I2C et RTC</h3>
+        <div class="schematic">
+          <div class="module-box actuator"><div class="module-title">LCD 16x2 I2C</div><div class="pin-list">VCC<br>GND<br>SDA<br>SCL</div></div>
+          <div><div class="wire-line red"></div><br><div class="wire-line black"></div><br><div class="wire-line yellow"></div><br><div class="wire-line yellow"></div></div>
+          <div class="module-box"><div class="module-title">Arduino Uno</div><div class="pin-list">5V<br>GND<br>A4 / SDA<br>A5 / SCL</div></div>
+        </div>
+        <div class="box important">
+          Le bus I2C utilise deux lignes principales : SDA pour les données et SCL pour l’horloge. Cette solution réduit le câblage et libère des broches numériques.
+        </div>
+      </div>
+
+      <div class="illustration-panel">
+        <h3>7.5 Relais, pompe et alimentation externe</h3>
+        <div class="diagram">Arduino D7 ───── Signal IN relais
+Arduino 5V ───── VCC module relais
+Arduino GND ──── GND module relais
+
+Alimentation externe +V ───── COM relais
+NO relais ─────────────────── + Pompe
+- Pompe ───────────────────── GND alimentation externe
+
+GND alimentation externe ──── GND Arduino si référence commune nécessaire</div>
+        <div class="box warning">
+          La pompe ne doit pas être alimentée directement depuis une broche Arduino. Elle doit être commandée par relais ou transistor, avec une alimentation externe adaptée.
+        </div>
+      </div>
+
+      <div class="illustration-panel">
+        <h3>7.6 Protection par diode roue libre</h3>
+        <div class="diagram">             +V externe
+                 │
+              [ POMPE DC ]
+                 │
+                 ├───────────────┐
+                 │               │
+              Relais /           │
+              Transistor         │
+                 │               │
+                GND          Diode roue libre
+                              placée en parallèle
+                              et en inverse</div>
+        <p>
+          La diode roue libre protège le circuit contre les surtensions générées par la pompe au moment de l’arrêt. Elle est indispensable lorsqu’on commande des charges inductives comme un moteur, une pompe ou un relais.
+        </p>
+      </div>
+
+      <div class="illustration-panel">
+        <h3>7.7 Vue conceptuelle du prototype physique</h3>
+        <div class="prototype-zone">
+          <div class="prototype-box"><span class="prototype-label label-top-left">Zone végétale</span><span class="prototype-label label-top-right">Capteur sol</span><span class="prototype-label label-bottom-left">Plante / terre</span><span class="prototype-label label-bottom-right">Sortie eau</span><p style="margin-top:80px;text-align:center;font-size:42px;">🌱💧</p><p style="text-align:center;">Zone d’irrigation : sol, plante, tuyau de sortie, capteur d’humidité.</p></div>
+          <div class="prototype-box"><span class="prototype-label label-top-left">Boîtier électronique</span><span class="prototype-label label-top-right">Arduino + LCD</span><span class="prototype-label label-bottom-left">Relais</span><span class="prototype-label label-bottom-right">Alimentation</span><p style="margin-top:80px;text-align:center;font-size:42px;">🔌🖥️</p><p style="text-align:center;">Zone de commande : Arduino, relais, afficheur LCD, alimentation et câblage.</p></div>
+        </div>
+      </div>
+
+      <h3>7.8 Diagramme irrigation</h3>
+      <div class="diagram">Lecture humidité sol
+   │
+Lecture pluie
+   │
+Lecture niveau eau
+   │
+Sol sec + pas de pluie + eau disponible ?
+   ├── Oui → Pompe ON
+   └── Non → Pompe OFF</div>
+
+      <h3>7.9 Diagramme parking</h3>
+      <div class="diagram">Mesure distance
+   │
+Distance < seuil ?
+   ├── Non → Barrière fermée
+   └── Oui → Confirmation de plusieurs mesures
+             ├── Non → Continuer lecture
+             └── Oui → Ouvrir barrière</div>
+
+      <h3>7.10 Diagramme éclairage</h3>
+      <div class="diagram">Lecture LDR
+   │
+Lecture heure RTC
+   │
+Comparaison avec éphémérides
+   │
+Lecture PIR
+   │
+Nuit + obscurité + mouvement ?
+   ├── Oui → Lumière ON
+   └── Non → Lumière OFF</div>
+    </section>
+
+    <section id="donnees">
+      <h2 class="section-title">8. Types de données utilisées</h2>
+      <p>
+        Le système manipule plusieurs catégories de données. Certaines sont brutes, d’autres sont transformées en états logiques afin de faciliter la décision automatique.
+      </p>
+      <table>
+        <thead><tr><th>Type de donnée</th><th>Exemple</th><th>Format</th><th>Utilisation</th></tr></thead>
+        <tbody>
+          <tr><td>Analogique brute</td><td>LDR = 735</td><td>Entier 0–1023</td><td>Lecture luminosité</td></tr>
+          <tr><td>Numérique</td><td>PIR = HIGH</td><td>0 / 1</td><td>Détection mouvement</td></tr>
+          <tr><td>Temporelle</td><td>18:45:20</td><td>Heure, minute, seconde</td><td>Éclairage selon horaire</td></tr>
+          <tr><td>Environnementale</td><td>Température = 26°C</td><td>Nombre</td><td>Monitoring</td></tr>
+          <tr><td>Booléenne</td><td>soilDry = true</td><td>true / false</td><td>Décision irrigation</td></tr>
+          <tr><td>Seuil</td><td>distanceSeuil = 15 cm</td><td>Entier</td><td>Comparaison</td></tr>
+          <tr><td>État</td><td>pumpState = ON</td><td>Texte / booléen</td><td>Affichage LCD</td></tr>
+          <tr><td>Géographique</td><td>ville = Oujda</td><td>Index de table</td><td>Éphémérides</td></tr>
+        </tbody>
+      </table>
+      <div class="choice-note">
+        <strong>Pourquoi distinguer les types de données</strong><br>
+        Un système embarqué fiable ne lit pas simplement des valeurs. Il les interprète, les transforme en états, puis les utilise dans une logique de décision. Cette distinction facilite le codage, le débogage et la présentation du projet.
+      </div>
+    </section>
+
+    <section id="dimensionnement">
+      <h2 class="section-title">9. Dimensionnement et protections</h2>
+
+      <h3>9.1 Dimensionnement électrique</h3>
+      <p>
+        Chaque composant possède une tension et un courant de fonctionnement spécifiques. Le système doit être dimensionné correctement afin d’éviter les surtensions, les chutes de tension, les surchauffes et les dysfonctionnements.
+      </p>
+      <table>
+        <thead><tr><th>Élément</th><th>Tension typique</th><th>Courant estimé</th><th>Source recommandée</th><th>Remarque</th></tr></thead>
+        <tbody>
+          <tr><td>Arduino Uno</td><td>5V</td><td>50–100 mA</td><td>USB / adaptateur</td><td>Partie logique principale</td></tr>
+          <tr><td>Capteurs simples</td><td>5V</td><td>Faible</td><td>Arduino</td><td>Consommation modérée</td></tr>
+          <tr><td>LCD I2C</td><td>5V</td><td>20–80 mA</td><td>5V stable</td><td>Le rétroéclairage peut consommer davantage</td></tr>
+          <tr><td>Servo moteur</td><td>5V</td><td>300–800 mA</td><td>Externe conseillé</td><td>Pic de courant au démarrage</td></tr>
+          <tr><td>Pompe DC</td><td>5V / 6V / 12V</td><td>300 mA à plus de 1 A</td><td>Externe obligatoire</td><td>Ne jamais alimenter depuis une broche Arduino</td></tr>
+          <tr><td>Module relais</td><td>5V</td><td>70–90 mA</td><td>5V stable</td><td>Préférer un module avec transistor intégré</td></tr>
+        </tbody>
+      </table>
+      <div class="choice-note risk-note">
+        <strong>Pourquoi l’alimentation externe est indispensable pour la pompe</strong><br>
+        Une pompe demande un courant supérieur à celui qu’une broche Arduino peut fournir. L’Arduino doit uniquement commander le relais ou le transistor, tandis que la puissance réelle doit venir d’une alimentation externe adaptée.
+      </div>
+
+      <h3>9.2 Protections recommandées</h3>
+      <table>
+        <thead><tr><th>Risque</th><th>Cause probable</th><th>Protection recommandée</th><th>Intérêt</th></tr></thead>
+        <tbody>
+          <tr><td>Surtension inverse</td><td>Arrêt pompe ou relais</td><td>Diode roue libre</td><td>Protéger le microcontrôleur</td></tr>
+          <tr><td>Court-circuit</td><td>Erreur de câblage</td><td>Fusible ou limitation de courant</td><td>Éviter l’échauffement</td></tr>
+          <tr><td>Chute de tension</td><td>Pompe ou servo trop consommateur</td><td>Alimentation externe</td><td>Stabiliser l’Arduino</td></tr>
+          <tr><td>Bruit électrique</td><td>Moteur, relais, câbles longs</td><td>Condensateurs de découplage</td><td>Réduire les perturbations</td></tr>
+          <tr><td>Entrée flottante</td><td>Signal non référencé</td><td>Résistances pull-up / pull-down</td><td>Éviter les valeurs aléatoires</td></tr>
+          <tr><td>Inversion de polarité</td><td>Mauvais branchement</td><td>Diode ou MOSFET de protection</td><td>Préserver les composants</td></tr>
+        </tbody>
+      </table>
+
+      <h3>9.3 Bonnes pratiques de câblage</h3>
+      <ul>
+        <li>Relier les masses lorsque les signaux de commande doivent partager une référence commune.</li>
+        <li>Séparer autant que possible les câbles de puissance et les câbles de signal.</li>
+        <li>Vérifier les polarités avant de brancher la pompe ou le relais.</li>
+        <li>Utiliser des fils adaptés au courant de la pompe.</li>
+        <li>Éviter les connexions lâches sur breadboard pour les charges de puissance.</li>
+        <li>Tester chaque module séparément avant l’intégration complète.</li>
+      </ul>
+      <div class="box warning">
+        <strong>Attention :</strong> un prototype peut fonctionner correctement pendant un test court, puis devenir instable lorsque plusieurs actionneurs se déclenchent ensemble. Le dimensionnement doit donc prendre en compte les pics de courant, pas seulement la consommation moyenne.
+      </div>
+    </section>
+
+    <section id="vulgarise">
+      <h2 class="section-title">10. Version vulgarisée</h2>
+      <p>
+        Le projet peut être expliqué simplement comme un petit système intelligent capable d’observer son environnement et de réagir automatiquement. Il possède plusieurs “sens” : il peut voir s’il fait sombre, détecter un mouvement, mesurer si le sol est sec, reconnaître la présence d’un véhicule et afficher les informations importantes.
+      </p>
+      <p>
+        Lorsqu’un véhicule s’approche, le capteur ultrason mesure la distance et l’Arduino ouvre la barrière. Lorsque la terre devient sèche, le système vérifie s’il ne pleut pas et si le réservoir contient de l’eau avant de lancer la pompe. Lorsqu’il fait nuit et qu’une personne passe, la lumière s’allume automatiquement.
+      </p>
+      <div class="box success">
+        <strong>Résumé simple :</strong> le système lit les capteurs, réfléchit selon des conditions programmées, agit avec des moteurs ou relais, puis affiche l’état sur l’écran LCD.
+      </div>
+      <div class="diagram">Observer → Comprendre → Décider → Agir → Afficher</div>
+    </section>
+
+    <section id="ameliorations">
+      <h2 class="section-title">11. Limites et améliorations futures</h2>
+      <p>
+        Même si le prototype est fonctionnel et cohérent, plusieurs améliorations peuvent être envisagées pour le rapprocher d’un système réel plus robuste.
+      </p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Limites actuelles</h3>
+          <ul>
+            <li>Les capteurs économiques peuvent être sensibles au bruit et à l’environnement.</li>
+            <li>La LDR peut être perturbée par une obstruction ou une lumière artificielle.</li>
+            <li>Le PIR dépend fortement de son angle d’installation.</li>
+            <li>Le capteur d’humidité du sol doit être calibré selon le type de terre.</li>
+            <li>La pompe nécessite une alimentation séparée et stable.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Améliorations possibles</h3>
+          <ul>
+            <li>Ajouter une connexion IoT pour suivre les données à distance.</li>
+            <li>Remplacer certains seuils fixes par des seuils adaptatifs.</li>
+            <li>Utiliser un capteur d’humidité capacitif plus durable.</li>
+            <li>Ajouter un module solaire pour l’autonomie énergétique.</li>
+            <li>Ajouter un historique des mesures pour analyser les tendances.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="choice-note">
+        <strong>Perspective d’évolution</strong><br>
+        Le projet peut évoluer vers une solution de Smart Garden ou de Smart Parking connectée, avec tableau de bord, alertes à distance, optimisation énergétique et stockage des données.
+      </div>
+    </section>
+
+    <section id="conclusion">
+      <h2 class="section-title">12. Conclusion générale</h2>
+      <p>
+        Ce projet CP1 a permis de concevoir un système intelligent automatisé capable d’interagir avec son environnement à travers plusieurs capteurs et actionneurs. L’Arduino joue le rôle de centre de décision : il lit les informations, les analyse, applique une logique de contrôle et déclenche les actions appropriées.
+      </p>
+      <p>
+        La force du projet réside dans la combinaison de plusieurs fonctions : parking automatique, irrigation intelligente, éclairage adaptatif et supervision par écran LCD. Cette intégration montre qu’un système embarqué peut coordonner plusieurs sous-systèmes à partir d’une architecture simple mais bien structurée.
+      </p>
+      <p>
+        Le rapport met également en valeur des notions scientifiques et techniques importantes : mesure par ultrasons, hydrostatique, évaporation, point de rosée, détection infrarouge, photorésistance, éphémérides, protections électriques et dimensionnement énergétique.
+      </p>
+      <div class="box success">
+        <strong>Bilan académique :</strong> le projet ne se limite pas à un montage Arduino. Il démontre une réflexion de conception, une compréhension des limites physiques, une logique de robustesse et une approche structurée proche d’un véritable mini-projet d’ingénierie.
+      </div>
+      <p>
+        En conclusion, ce travail représente une base solide pour comprendre les systèmes automatisés modernes. Il peut être amélioré par l’ajout de connectivité IoT, de stockage de données, de modules solaires ou d’algorithmes plus avancés, mais il constitue déjà un prototype complet, cohérent et défendable dans un cadre académique.
+      </p>
+    </section>
+
+    <p class="print-note">Rapport CP1 ISMAGI — Version académique complète, optimisée, non raccourcie et prête à publier</p>
+  </main>
+</body>
+</html>
